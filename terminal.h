@@ -7,10 +7,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <sys/ioctl.h>
+
+struct editorConfig
+{
+    int screenrows;
+    int screencols;
+    struct termios o_termios;
+};
 
 void die(const char *s);
-void restoreOriginalTerminalConfig();
-void enableRawMode();
+void restoreOriginalTerminalConfig(struct editorConfig* e);
+void enableRawMode(struct editorConfig* e);
 char editorReadKey();
+int getWindowSize(int* rows, int* cols);
 
 #endif

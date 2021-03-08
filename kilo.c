@@ -8,16 +8,22 @@
 #include "terminal.h"
 #include "input.h"
 #include "output.h"
+#include "init.h"
+#include "append_buffer.h"
  
+struct editorConfig E;
+
 int main()
 {
-    enableRawMode();
+    enableRawMode(&E);
+    initEditor(&E);
 
     while (1)
     {
-        editorRefreshScreen();
-        editorProcessKeypress();
+        editorRefreshScreen(&E);
+        editorProcessKeypress(&E);
     }
 
+    restoreOriginalTerminalConfig(&E);
     return 0;
 }
