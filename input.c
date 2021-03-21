@@ -52,7 +52,7 @@ void editorMoveCursor(int key, struct editorConfig* e)
             e->cx--;
         break;
     case ARROW_DOWN:
-        if (e->cy < e->screenrows - 1)
+        if (e->cy < e->numrows)
             e->cy++;
         break;
     case ARROW_RIGHT:

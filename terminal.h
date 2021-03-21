@@ -7,13 +7,24 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <string.h>
 #include <sys/ioctl.h>
+#include <sys/types.h>
+
+typedef struct erow
+{
+    int size;
+    char* chars;
+} erow;
 
 struct editorConfig
 {
     int cx, cy;
+    int rowoff;
     int screenrows;
     int screencols;
+    int numrows;
+    erow* row;
     struct termios o_termios;
 };
 
@@ -35,5 +46,6 @@ void restoreOriginalTerminalConfig(struct editorConfig* e);
 void enableRawMode(struct editorConfig* e);
 int editorReadKey();
 int getWindowSize(int* rows, int* cols);
+void editorOpen(struct editorConfig* e, char* filename);
 
 #endif

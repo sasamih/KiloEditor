@@ -138,3 +138,36 @@ int getCursorPosition(int* rows, int* cols)
     editorReadKey();
     return -1;
 }
+
+static void editorAppendRow(struct editorConfig* e, char* s, size_t len)
+{
+    e->row = realloc(e->row, sizeof(erow) * (e->numrows + 1));
+
+    int at = e->numrows;
+    e->row[at].size = len;
+    e->row[at].chars = malloc(len + 1);
+    memcpy(e->row[at].chars, s, len);
+    e->row[at].chars[len] = '\0';
+    e->numrows++;
+}
+
+void editorOpen(struct editorConfig* e, char* filename)
+{
+    FILE* fp = fopen(filename, "r");
+    if (!fp) die("fopen");
+
+    char* line = NULL;
+    ssize_t linelen;
+    size_t linecap = 0;
+
+    while ((linelen = getline(&line, &linecap, fp)) != -1)
+    {
+        while(linelen > 0 && (line[linelen - 1] == '\n' || line[linelen - 1] == '\r'))
+        {
+            linelen--;
+        }
+        editorAppendRow(e, line, linelen);
+    }
+    free(line);
+    fclose(fp);
+}
